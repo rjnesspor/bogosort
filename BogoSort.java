@@ -1,42 +1,53 @@
-public class BogoSort {
+import java.util.Comparator;
+import java.util.List;
+
+/**
+ * Allows the BogoSort sorting method to be performed on a List of numbers.
+ * @param <T> Generic type to be sorted.
+ * @author rjnesspor
+ * @version 12/14/2023
+ */
+
+public class BogoSort<T extends Number & Comparable<T>> {
+
 	private long passes = 0;
 
-	void bogoSort(int[] a) {
-		while (isSorted(a) == false) {
-			shuffle(a);
+	private List<T> arr;
+
+	public BogoSort(List<T> arr) {
+		this.arr = arr;
+	}
+
+	public void bogoSort() {
+		while (!isSorted()) {
+			shuffle();
 			passes++;
 		}
 	}
 
-	void shuffle(int[] a) {
-		for (int i = 0; i < a.length; i++) {
-			swap(a, i, (int) (Math.random() * a.length));
+	private void shuffle() {
+		for (int i = 0; i < arr.size(); i++) {
+			swap(i, (int) (Math.random() * arr.size()));
 		}
 	}
 
-	void swap(int[] a, int i, int j) {
-		int temp = a[i];
-		a[i] = a[j];
-		a[j] = temp;
+	private void swap(int i, int j) {
+		T temp = arr.get(i);
+		arr.set(i, arr.get(j));
+		arr.set(j, temp);
 	}
 
-	boolean isSorted(int[] a) {
-		for (int i = 1; i < a.length; i++)
-			if (a[i] < a[i - 1])
+	private boolean isSorted() {
+		for (int i = 1; i < arr.size(); i++)
+			if (arr.get(i).compareTo(arr.get(i - 1)) < 0) {
 				return false;
+			}
 		return true;
 	}
 
-	void printArray(int[] arr) {
-		System.out.println("It took " + passes + " loops to sort.");
-		for (int i = 0; i < arr.length; i++)
-			System.out.print(arr[i] + " ");
-		System.out.println();
-		passes = 0;
+	@Override
+	public String toString() {
+		return "Passes: " + passes + " Array: " + arr.toString();
 	}
-		void print(int[] arr) {
-		for (int i = 0; i < arr.length; i++)
-			System.out.print(arr[i] + " ");
-		System.out.println();
-	}
+
 }
